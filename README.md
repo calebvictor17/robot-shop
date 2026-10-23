@@ -36,9 +36,9 @@ To strike a balance between real-world enterprise CI/CD practices and strict **c
 
    * Pushing to the main branch triggers automated checks and securely communicates with EKS to deploy workloads via `kubectl` and `Helm`.
 
-     ![Github-pipe](./assets/04-github-actions-pipeline.png)
+     ![Github-pipe](./screenshots/04-github-actions-pipeline.png)
 
-     ![Github-pipe2](./assets/04-github-actions-pipeline2.png)
+     ![Github-pipe2](./screenshots/04-github-actions-pipeline2.png)
 
 ## 📊 Observability & Monitoring Setup
 
@@ -57,19 +57,19 @@ The monitoring stack was deployed using Helm via the `kube-prometheus-stack` ins
 
 * **Local Service Access:** Attained securely via `kubectl port-forward`:
 
-  ![cluster](./assets/03-aws-eks-cluster.png)
+  ![cluster](./screenshots/03-aws-eks-cluster.png)
 
-  ![cluster2](./assets/03-aws-eks-cluster2.png)
+  ![cluster2](./screenshots/03-aws-eks-cluster2.png)
 
   * **Grafana:** `kubectl port-forward svc/kube-prometheus-stack-grafana 3000:80 -n logging`
 
-    ![grafana](./assets/02-grafana-promql-explore.png)
+    ![grafana](./screenshots/02-grafana-promql-explore.png)
 
   * **Alertmanager:** `kubectl port-forward svc/kube-prometheus-stack-alertmanager 9093:9093 -n logging`
 
-    ![alertfire](./assets/01-alertmanager-firing.png)
+    ![alertfire](./screenshots/01-alertmanager-firing.png)
 
-    ![alertfire2](./assets/01-alertmanager-firing2.png)
+    ![alertfire2](./screenshots/01-alertmanager-firing2.png)
 
 ## 🧪 Chaos Engineering & Resilience Testing
 
