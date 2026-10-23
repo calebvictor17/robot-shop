@@ -21,7 +21,7 @@ resource "aws_iam_role_policy_attachment" "cluster_AmazonEKSClusterPolicy" {
 
 # EKS Cluster (Using Custom VPC Subnet References)
 resource "aws_eks_cluster" "cluster" {
-  name     = "voting-app-cluster"
+  name     = "caleb-cluster"
   role_arn = aws_iam_role.cluster_role.arn
 
   vpc_config {
