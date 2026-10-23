@@ -1,0 +1,55 @@
+name: CI/CD Pipeline - Robot Shop & Observability
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  lint-and-deploy:
+    name: Lint, Validate & Deploy to EKS
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository Code
+        uses: actions/checkout@v4
+
+      - name: Set up Helm
+        uses: azure/setup-helm@v3
+        with:
+          version: 'latest'
+
+      - name: Lint Application Helm Chart
+        run: |
+          helm lint K8s/helm/
+
+      - name: Lint Observability Helm Values
+        run: |
+          helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+          helm repo update
+          helm template test-release prometheus-community/kube-prometheus-stack \
+            -f observability/helm-values/prometheus-values.yaml \
+            --kube-version 1.28.0 \
+            --dry-run > /dev/null
+          echo "Helm charts and observability configurations validated successfully!"
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v3
+        with:
+          version: 'latest'
+
+      - name: Update Kubeconfig for EKS
+        run: |
+          aws eks update-kubeconfig --region us-east-1 --name voting-app-cluster
+
+      - name: Deploy Robot Shop Application via Helm
+        run: |
+          helm upgrade --install robot-shop K8s/helm/ --namespace robot-shop --create-namespace

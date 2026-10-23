@@ -1,0 +1,17 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: robot-shop-monitor
+  namespace: robot-shop
+  labels:
+    release: kube-prometheus-stack
+spec:
+  selector:
+    matchExpressions:
+      - key: service
+        operator: In
+        values: ["web", "catalogue", "cart", "payment"]
+  endpoints:
+    - port: http
+      interval: 15s
+      path: /metrics

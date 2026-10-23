@@ -1,0 +1,12 @@
+.*.swp
+.DS_Store
+*-private.*
+vendor/
+Gopkg.lock
+# Terraform local files
+.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
+*.tfvars
+.terraform.lock.hcl # (Optional: some prefer committing this, but local providers will re-download fine either way)

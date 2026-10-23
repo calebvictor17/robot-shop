@@ -1,0 +1,12 @@
+# prometheus-values.yaml
+grafana:
+  enabled: true
+  adminPassword: "admin" # Change for production use
+  service:
+    type: LoadBalancer
+
+prometheus:
+  prometheusSpec:
+    serviceMonitorSelectorNilUsesHelmValues: false
+    podMonitorSelectorNilUsesHelmValues: false
+    ruleSelectorNilUsesHelmValues: false

@@ -1,0 +1,24 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: robot-shop-slo-alerts
+  namespace: robot-shop
+  labels:
+    release: kube-prometheus-stack
+spec:
+  groups:
+  - name: RobotShopSLO
+    rules:
+    - alert: RobotShopHighErrorRateSLOBurn
+      expr: |
+        sum(rate(http_request_duration_seconds_bucket{service=~"web|catalogue|cart|payment", status=~"5.."}[5m]))
+        /
+        sum(rate(http_request_duration_seconds_bucket{service=~"web|catalogue|cart|payment"}[5m])) > 0.01
+      for: 2m
+      labels:
+        severity: critical
+        team: sre-core
+      annotations:
+        summary: "High error rate burning SLO error budget on Robot Shop"
+        description: "Error rate for focus microservices has exceeded 1% over the last 5 minutes."
+        runbook_url: "https://github.com/levithunderstorm/robot-shop/blob/main/docs/RUNBOOK.md#incident-mitigation"
